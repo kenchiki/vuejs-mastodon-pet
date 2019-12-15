@@ -20,10 +20,9 @@ export default class Account extends VuexModule {
   public localStorage: Storage = localStorage;
   public sessionStorage: Storage = sessionStorage;
 
+  // client、tokenどちらを取得する際も同一のものを指定する必要あり（認証のところで無効と表示されてしまうため）
   static readonly API_SCOPE: string = 'read write';
   static readonly APP_NAME: string = '銀河ペット';
-  // client、tokenどちらを取得する際も同一のものを指定する必要あり（認証のところで無効と表示されてしまうため）
-  static readonly REDIRECT_URI: string = 'http://localhost:8888/oauth_callback';
 
   @Mutation
   setMastodonUrl (mastodonUrl: string) {
@@ -69,7 +68,7 @@ export default class Account extends VuexModule {
   async fetchClient () {
     const postParams = {
       client_name: Account.APP_NAME,
-      redirect_uris: Account.REDIRECT_URI,
+      redirect_uris: Account.REDIRECT_URI(),
       scopes: Account.API_SCOPE
     }
 
@@ -92,7 +91,7 @@ export default class Account extends VuexModule {
     const getParams = {
       response_type: 'code',
       client_id: this.sessionStorage.getItem('client_id'),
-      redirect_uri: Account.REDIRECT_URI,
+      redirect_uri: Account.REDIRECT_URI(),
       scope: Account.API_SCOPE
     }
 
@@ -110,7 +109,7 @@ export default class Account extends VuexModule {
       client_secret: this.sessionStorage.getItem('client_secret'),
       grant_type: 'authorization_code',
       code: code,
-      redirect_uri: Account.REDIRECT_URI
+      redirect_uri: Account.REDIRECT_URI()
     }
 
     try {
@@ -137,5 +136,10 @@ export default class Account extends VuexModule {
     } catch (error) {
       this.setError(error)
     }
+  }
+
+  static REDIRECT_URI (): string {
+    if (process.env.NODE_ENV === 'production') return `https://${process.env.VUE_APP_DOMAIN}`
+    return `http://${process.env.VUE_APP_DOMAIN}:${process.env.VUE_APP_PORT}/oauth_callback`
   }
 }
