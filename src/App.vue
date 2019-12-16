@@ -3,11 +3,24 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link>
+      <router-link to="/login">Login</router-link> |
+      <router-link to="/messages">Messages</router-link>
     </div>
     <router-view />
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator'
+import HelloWorld from '@/components/HelloWorld.vue'
+
+@Component({ components: { HelloWorld } })
+export default class Home extends Vue {
+  created () {
+  }
+}
+</script>
 
 <style lang="scss">
 #app {

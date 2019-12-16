@@ -24,6 +24,10 @@ export default class Account extends VuexModule {
   static readonly API_SCOPE: string = 'read write';
   static readonly APP_NAME: string = '銀河ペット';
 
+  get getTest (): string {
+    return this.sessionStorage.getItem('token')!
+  }
+
   @Mutation
   setMastodonUrl (mastodonUrl: string) {
     this.sessionStorage.setItem('mastodon_url', mastodonUrl)

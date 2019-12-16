@@ -24,6 +24,11 @@ const routes = [
     path: '/oauth_callback',
     name: 'oauth_callback',
     component: () => import('../views/OauthCallback.vue')
+  },
+  {
+    path: '/messages',
+    name: 'messages',
+    component: () => import('../views/Messages.vue')
   }
 ]
 
